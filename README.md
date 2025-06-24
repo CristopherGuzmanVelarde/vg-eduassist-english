@@ -1,32 +1,38 @@
-# Microservicio de Gestión de Logs de Calificaciones (vg-ms-grade-management)
+-----
 
-Este microservicio está diseñado para registrar y consultar los cambios realizados en las calificaciones de los estudiantes. Utiliza una arquitectura hexagonal, programación reactiva con Spring WebFlux y MongoDB como base de datos.
+# EduAssist Grade Management Log Microservice (vg-ms-grade-management)
 
-## Tecnologías Utilizadas
+This microservice is designed to log and query changes made to student grades. It uses a hexagonal architecture, reactive programming with Spring WebFlux, and MongoDB as its database.
 
-- Java 17
-- Spring Boot 3.x
-- Spring WebFlux (para programación reactiva)
-- Spring Data MongoDB Reactive
-- Lombok
-- Maven (para la gestión de dependencias)
-- MongoDB
+## Technologies Used
 
-## Arquitectura Hexagonal
+  * Java 17
+  * Spring Boot 3.x
+  * Spring WebFlux (for reactive programming)
+  * Spring Data MongoDB Reactive
+  * Lombok
+  * Maven (for dependency management)
+  * MongoDB
 
-El proyecto sigue los principios de la arquitectura hexagonal (también conocida como Puertos y Adaptadores) para separar las preocupaciones y mejorar la mantenibilidad y testeabilidad del código.
+-----
 
-- **Dominio (`domain`):** Contiene la lógica de negocio central y los modelos de entidad (POJOs).
-    - `model`: Clases que representan las entidades del dominio como `GradeManagementLog`, `ModifiedData`, `ModifiedField`, `ContextMetadata`.
-    - `repository`: Interfaces que definen las operaciones de persistencia para las entidades del dominio (ej. `GradeManagementLogRepository`).
-- **Aplicación (`application`):** Orquesta los casos de uso y la lógica de la aplicación.
-    - `service`: Interfaces que definen los servicios de la aplicación (ej. `GradeManagementLogService`).
-    - `service/impl`: Implementaciones de los servicios de la aplicación (ej. `GradeManagementLogServiceImpl`).
-- **Infraestructura (`infrastructure`):** Contiene los adaptadores para tecnologías externas.
-    - `adapter/rest`: Controladores REST que exponen la API (ej. `GradeManagementLogController`).
-    - La configuración de la base de datos (MongoDB) se gestiona a través de `application.yml` y Spring Data MongoDB Reactive.
+## Hexagonal Architecture
 
-## Estructura del Proyecto
+The project follows the principles of hexagonal architecture (also known as Ports and Adapters) to separate concerns and improve code maintainability and testability.
+
+  * **Domain (`domain`):** Contains the core business logic and entity models (POJOs).
+      * `model`: Classes representing domain entities like `GradeManagementLog`, `ModifiedData`, `ModifiedField`, `ContextMetadata`.
+      * `repository`: Interfaces defining persistence operations for domain entities (e.g., `GradeManagementLogRepository`).
+  * **Application (`application`):** Orchestrates use cases and application logic.
+      * `service`: Interfaces defining application services (e.g., `GradeManagementLogService`).
+      * `service/impl`: Implementations of application services (e.g., `GradeManagementLogServiceImpl`).
+  * **Infrastructure (`infrastructure`):** Contains adapters for external technologies.
+      * `adapter/rest`: REST controllers exposing the API (e.g., `GradeManagementLogController`).
+      * Database configuration (MongoDB) is managed via `application.yml` and Spring Data MongoDB Reactive.
+
+-----
+
+## Project Structure
 
 ```
 .vg-ms-grade-management
@@ -39,7 +45,7 @@ El proyecto sigue los principios de la arquitectura hexagonal (también conocida
     │   │       └── edu
     │   │           └── vallegrande
     │   │               └── vg_ms_grade_management
-    │   │                   ├── VgMsGradeManagementApplication.java  (Clase principal de Spring Boot)
+    │   │                   ├── VgMsGradeManagementApplication.java (Main Spring Boot class)
     │   │                   ├── application
     │   │                   │   ├── service
     │   │                   │   │   ├── GradeManagementLogService.java
@@ -58,7 +64,7 @@ El proyecto sigue los principios de la arquitectura hexagonal (también conocida
     │   │                           └── rest
     │   │                               └── GradeManagementLogController.java
     │   └── resources
-    │       └── application.yml (Configuración de la aplicación y MongoDB)
+    │       └── application.yml (Application and MongoDB configuration)
     └── test
         └── java
             └── pe
@@ -68,12 +74,14 @@ El proyecto sigue los principios de la arquitectura hexagonal (también conocida
                             └── VgMsGradeManagementApplicationTests.java
 ```
 
-## Configuración
+-----
+
+## Configuration
 
 1.  **MongoDB:**
-    Asegúrate de tener una instancia de MongoDB corriendo.
-    La configuración de la conexión se encuentra en `src/main/resources/application.yml`.
-    Por defecto, se conecta a `mongodb+srv://cristopherguzman:orTIWL10NmFAo3S5@cluster0.o8sc9.mongodb.net/AS231S5_PRS2?retryWrites=true&w=majority&appName=Cluster0` y utiliza la base de datos `AS231S5_PRS2`.
+    Ensure you have a MongoDB instance running.
+    Connection configuration is located in `src/main/resources/application.yml`.
+    By default, it connects to `mongodb+srv://cristopherguzman:orTIWL10NmFAo3S5@cluster0.o8sc9.mongodb.net/AS231S5_PRS2?retryWrites=true&w=majority&appName=Cluster0` and uses the database `AS231S5_PRS2`.
 
     ```yaml
     spring:
@@ -83,38 +91,50 @@ El proyecto sigue los principios de la arquitectura hexagonal (también conocida
         mongodb:
           uri: mongodb+srv://cristopherguzman:orTIWL10NmFAo3S5@cluster0.o8sc9.mongodb.net/AS231S5_PRS2?retryWrites=true&w=majority&appName=Cluster0
           database: AS231S5_PRS2
-          # Si tienes credenciales diferentes para esta URI, configúralas aquí:
-          # username: tu_usuario
-          # password: tu_contraseña
+          # If you have different credentials for this URI, configure them here:
+          # username: your_username
+          # password: your_password
           # authentication-database: admin
     ```
-    Puedes modificar el URI de conexión según tu configuración de MongoDB. Si tu base de datos requiere autenticación, asegúrate de que las credenciales estén incluidas en el URI o configura las propiedades `spring.data.mongodb.username`, `spring.data.mongodb.password`, y `spring.data.mongodb.authentication-database`.
 
-## Cómo Ejecutar
+    You can modify the connection URI according to your MongoDB setup. If your database requires authentication, ensure credentials are included in the URI or configure the `spring.data.mongodb.username`, `spring.data.mongodb.password`, and `spring.data.mongodb.authentication-database` properties.
 
-1.  **Clonar el repositorio (si aplica).**
-2.  **Asegurarse de que MongoDB esté en ejecución y accesible.**
-3.  **Construir el proyecto usando Maven:**
+-----
+
+## How to Run
+
+1.  **Clone the repository (if applicable).**
+
+2.  **Ensure MongoDB is running and accessible.**
+
+3.  **Build the project using Maven:**
+
     ```bash
     mvn clean install
     ```
-4.  **Ejecutar la aplicación:**
-    Puedes ejecutar la aplicación desde tu IDE (ej. IntelliJ IDEA, Eclipse) importando el proyecto Maven y ejecutando la clase `VgMsGradeManagementApplication.java`.
-    O bien, puedes ejecutar el archivo JAR generado (después de `mvn clean install`):
+
+4.  **Run the application:**
+    You can run the application from your IDE (e.g., IntelliJ IDEA, Eclipse) by importing the Maven project and executing the `VgMsGradeManagementApplication.java` class.
+    Alternatively, you can run the generated JAR file (after `mvn clean install`):
+
     ```bash
     java -jar target/vg-ms-grade-management-0.0.1-SNAPSHOT.jar
     ```
-    Por defecto, el microservicio se iniciará en el puerto `8080` (configurable en `application.yml` con `server.port`).
 
-## Endpoints de la API
+    By default, the microservice will start on port `8080` (configurable in `application.yml` with `server.port`).
 
-La API se expone bajo el path base `/grade-logs`.
+-----
+
+## API Endpoints
+
+The API is exposed under the base path `/grade-logs`.
 
 ### `POST /grade-logs`
 
-Crea un nuevo registro de log de calificación.
+Creates a new grade log entry.
 
--   **Request Body:** `GradeManagementLog` (JSON)
+  * **Request Body:** `GradeManagementLog` (JSON)
+
     ```json
     {
         "gradeId": 456,
@@ -149,89 +169,96 @@ Crea un nuevo registro de log de calificación.
         "modifiedBy": 3
     }
     ```
--   **Response:** `201 Created` con el `GradeManagementLog` creado (incluyendo el `id` generado por MongoDB y `modifiedAt`).
+
+  * **Response:** `201 Created` with the created `GradeManagementLog` (including the `id` generated by MongoDB and `modifiedAt`).
 
 ### `GET /grade-logs`
 
-Obtiene todos los registros de log de calificaciones.
+Retrieves all grade log entries.
 
--   **Response:** `200 OK` con un array de `GradeManagementLog`.
+  * **Response:** `200 OK` with an array of `GradeManagementLog`.
 
 ### `GET /grade-logs/{id}`
 
-Obtiene un registro de log de calificación por su ID (el `id` generado por MongoDB).
+Retrieves a grade log entry by its ID (the `id` generated by MongoDB).
 
--   **Path Variable:** `id` (String) - El ID del log.
--   **Response:**
-    -   `200 OK` con el `GradeManagementLog` encontrado.
-    -   `404 Not Found` si el log no existe.
+  * **Path Variable:** `id` (String) - The log ID.
+  * **Response:**
+      * `200 OK` with the found `GradeManagementLog`.
+      * `404 Not Found` if the log does not exist.
 
 ### `GET /grade-logs/student/{studentId}`
 
-Obtiene todos los registros de log para un estudiante específico.
+Retrieves all log entries for a specific student.
 
--   **Path Variable:** `studentId` (Long) - El ID del estudiante.
--   **Response:** `200 OK` con un array de `GradeManagementLog`.
+  * **Path Variable:** `studentId` (Long) - The student's ID.
+  * **Response:** `200 OK` with an array of `GradeManagementLog`.
 
 ### `GET /grade-logs/grade/{gradeId}`
 
-Obtiene todos los registros de log para una calificación específica.
+Retrieves all log entries for a specific grade.
 
--   **Path Variable:** `gradeId` (Long) - El ID de la calificación.
--   **Response:** `200 OK` con un array de `GradeManagementLog`.
+  * **Path Variable:** `gradeId` (Long) - The grade's ID.
+  * **Response:** `200 OK` with an array of `GradeManagementLog`.
 
 ### `GET /grade-logs/period/{periodId}`
 
-Obtiene todos los registros de log para un período académico específico.
+Retrieves all log entries for a specific academic period.
 
--   **Path Variable:** `periodId` (Long) - El ID del período.
--   **Response:** `200 OK` con un array de `GradeManagementLog`.
+  * **Path Variable:** `periodId` (Long) - The period's ID.
+  * **Response:** `200 OK` with an array of `GradeManagementLog`.
 
 ### `GET /grade-logs/teacher-courses-classroom/{teacherCoursesClassroom}`
 
-Obtiene todos los registros de log para una combinación específica de profesor, curso y aula.
+Retrieves all log entries for a specific teacher, course, and classroom combination.
 
--   **Path Variable:** `teacherCoursesClassroom` (Long) - El ID de la combinación.
--   **Response:** `200 OK` con un array de `GradeManagementLog`.
+  * **Path Variable:** `teacherCoursesClassroom` (Long) - The combination ID.
+  * **Response:** `200 OK` with an array of `GradeManagementLog`.
 
 ### `DELETE /grade-logs/{id}`
 
-Elimina un registro de log de calificación por su ID.
+Deletes a grade log entry by its ID.
 
--   **Path Variable:** `id` (String) - El ID del log a eliminar.
--   **Response:**
-    -   `204 No Content` si la eliminación es exitosa.
-    -   `404 Not Found` si el log no existe.
+  * **Path Variable:** `id` (String) - The ID of the log to delete.
+  * **Response:**
+      * `204 No Content` if the deletion is successful.
+      * `404 Not Found` if the log does not exist.
 
-## Ejemplo de Modelo de Datos (`GradeManagementLog`)
+-----
 
-La estructura principal de los datos almacenados es la siguiente:
+## Example Data Model (`GradeManagementLog`)
 
--   `id` (String, generado por MongoDB): Identificador único del log.
--   `gradeId` (Long): ID de la calificación afectada.
--   `studentId` (Long): ID del estudiante.
--   `teacherCoursesClassroom` (Long): ID de la combinación profesor-curso-aula.
--   `periodId` (Long): ID del período académico.
--   `actionType` (String): Tipo de acción (ej. "CREACIÓN", "ACTUALIZACIÓN", "ELIMINACIÓN").
--   `modifiedData` (Object): Objeto que contiene los detalles de la modificación.
-    -   `previousGrade` (Double): Calificación anterior (si aplica).
-    -   `newGrade` (Double): Nueva calificación (si aplica).
-    -   `modifiedFields` (List<Object>): Lista de campos específicos modificados.
-        -   `field` (String): Nombre del campo.
-        -   `oldValue` (Object): Valor anterior.
-        -   `newValue` (Object): Nuevo valor.
-        -   `impact` (String): Descripción del impacto del cambio.
-    -   `contextMetadata` (Object): Metadatos del contexto de la modificación.
-        -   `curricularComponent` (String): Componente curricular.
-        -   `learningUnit` (String): Unidad de aprendizaje.
-        -   `evaluationCriteria` (String): Criterio de evaluación.
--   `changeReason` (String): Razón del cambio.
--   `modifiedBy` (Long): ID del usuario que realizó la modificación.
--   `modifiedAt` (LocalDateTime): Fecha y hora de la modificación (generada automáticamente).
+The main structure of the stored data is as follows:
 
-## Consideraciones Adicionales
+  * `id` (String, generated by MongoDB): Unique log identifier.
+  * `gradeId` (Long): ID of the affected grade.
+  * `studentId` (Long): Student's ID.
+  * `teacherCoursesClassroom` (Long): ID of the teacher-course-classroom combination.
+  * `periodId` (Long): ID of the academic period.
+  * `actionType` (String): Type of action (e.g., "CREATION", "UPDATE", "DELETION").
+  * `modifiedData` (Object): Object containing modification details.
+      * `previousGrade` (Double): Previous grade (if applicable).
+      * `newGrade` (Double): New grade (if applicable).
+      * `modifiedFields` (List\<Object\>): List of specific fields modified.
+          * `field` (String): Field name.
+          * `oldValue` (Object): Old value.
+          * `newValue` (Object): New value.
+          * `impact` (String): Description of the change's impact.
+      * `contextMetadata` (Object): Metadata about the modification context.
+          * `curricularComponent` (String): Curricular component.
+          * `learningUnit` (String): Learning unit.
+          * `evaluationCriteria` (String): Evaluation criteria.
+  * `changeReason` (String): Reason for the change.
+  * `modifiedBy` (Long): ID of the user who made the modification.
+  * `modifiedAt` (LocalDateTime): Date and time of modification (automatically generated).
 
--   **Manejo de Errores:** El controlador implementa un manejo básico de errores (ej. 404 Not Found). Se podría extender con un `ControllerAdvice` global para un manejo más robusto.
--   **Seguridad:** No se ha implementado seguridad en esta versión. Para un entorno de producción, se deberían añadir mecanismos de autenticación y autorización (ej. Spring Security con JWT).
--   **Validación:** Se podrían añadir validaciones a los datos de entrada utilizando Bean Validation (`javax.validation` o `jakarta.validation`).
--   **Pruebas:** Se recomienda añadir pruebas unitarias y de integración para asegurar la calidad del código.
+-----
+
+## Additional Considerations
+
+  * **Error Handling:** The controller implements basic error handling (e.g., 404 Not Found). This could be extended with a global `ControllerAdvice` for more robust handling.
+  * **Security:** Security has not been implemented in this version. For a production environment, authentication and authorization mechanisms (e.g., Spring Security with JWT) should be added.
+  * **Validation:** Input data validations could be added using Bean Validation (`javax.validation` or `jakarta.validation`).
+  * **Testing:** It is recommended to add unit and integration tests to ensure code quality.
+
+-----
