@@ -1,8 +1,16 @@
 -----
 
-# EduAssist Grade Microservice (vg-eduassist-english)
+# EduAssist-Grade Microservice (vg-grade-english)
 
 This microservice is designed to log and query changes made to student grades. It uses a hexagonal architecture, reactive programming with Spring WebFlux, and MongoDB as its database.
+
+-----
+
+## Project Purpose
+
+This microservice acts as a **centralized logging system** for all modifications made to student grades. Its primary goal is to provide an immutable record of changes, enabling **auditing, historical tracking, and accountability** for grade adjustments within the educational platform. By meticulously logging each alteration, the system ensures data integrity and supports transparent grade management.
+
+-----
 
 ## Technologies Used
 
@@ -76,52 +84,35 @@ The project follows the principles of hexagonal architecture (also known as Port
 
 -----
 
-## Configuration
+## Setup Instructions
 
-1.  **MongoDB:**
-    Ensure you have a MongoDB instance running.
-    Connection configuration is located in `src/main/resources/application.yml`.
-    By default, it connects to `mongodb+srv://cristopherguzman:orTIWL10NmFAo3S5@cluster0.o8sc9.mongodb.net/AS231S5_PRS2?retryWrites=true&w=majority&appName=Cluster0` and uses the database `AS231S5_PRS2`.
-
-    ```yaml
-    spring:
-      application:
-        name: vg-ms-grade-management
-      data:
-        mongodb:
-          uri: mongodb+srv://cristopherguzman:orTIWL10NmFAo3S5@cluster0.o8sc9.mongodb.net/AS231S5_PRS2?retryWrites=true&w=majority&appName=Cluster0
-          database: AS231S5_PRS2
-          # If you have different credentials for this URI, configure them here:
-          # username: your_username
-          # password: your_password
-          # authentication-database: admin
-    ```
-
-    You can modify the connection URI according to your MongoDB setup. If your database requires authentication, ensure credentials are included in the URI or configure the `spring.data.mongodb.username`, `spring.data.mongodb.password`, and `spring.data.mongodb.authentication-database` properties.
-
------
-
-## How to Run
-
-1.  **Clone the repository (if applicable).**
-
-2.  **Ensure MongoDB is running and accessible.**
-
-3.  **Build the project using Maven:**
-
+1.  **Ensure MongoDB is running** and accessible.
+2.  **Verify the MongoDB connection string** in `src/main/resources/application.yml`. Update it if your MongoDB instance requires different credentials or a different URI.
+3.  **Build the project** using Maven:
     ```bash
     mvn clean install
     ```
-
-4.  **Run the application:**
-    You can run the application from your IDE (e.g., IntelliJ IDEA, Eclipse) by importing the Maven project and executing the `VgMsGradeManagementApplication.java` class.
-    Alternatively, you can run the generated JAR file (after `mvn clean install`):
-
+4.  **Run the application.** You can execute the `VgMsGradeManagementApplication.java` class from your IDE, or run the generated JAR file:
     ```bash
     java -jar target/vg-ms-grade-management-0.0.1-SNAPSHOT.jar
     ```
+    The microservice will start on port `8080` by default.
 
-    By default, the microservice will start on port `8080` (configurable in `application.yml` with `server.port`).
+-----
+
+## How to Use the App
+
+This microservice provides API endpoints to manage grade log entries.
+
+  * To **create a new log entry**, you should send a `POST` request to `/grade-logs` with a JSON body representing the `GradeManagementLog`.
+  * To **retrieve all log entries**, you should send a `GET` request to `/grade-logs`.
+  * To **get a specific log entry by ID**, you should use the `GET` endpoint `/grade-logs/{id}`.
+  * To **query logs for a specific student, grade, period, or teacher-course-classroom combination**, you should use the respective `GET` endpoints:
+      * `/grade-logs/student/{studentId}`
+      * `/grade-logs/grade/{gradeId}`
+      * `/grade-logs/period/{periodId}`
+      * `/grade-logs/teacher-courses-classroom/{teacherCoursesClassroom}`
+  * To **delete a log entry**, you should send a `DELETE` request to `/grade-logs/{id}`.
 
 -----
 
@@ -254,11 +245,51 @@ The main structure of the stored data is as follows:
 
 -----
 
-## Additional Considerations
+## Future Plans
 
-  * **Error Handling:** The controller implements basic error handling (e.g., 404 Not Found). This could be extended with a global `ControllerAdvice` for more robust handling.
-  * **Security:** Security has not been implemented in this version. For a production environment, authentication and authorization mechanisms (e.g., Spring Security with JWT) should be added.
-  * **Validation:** Input data validations could be added using Bean Validation (`javax.validation` or `jakarta.validation`).
-  * **Testing:** It is recommended to add unit and integration tests to ensure code quality.
+Several enhancements should be considered for future development:
+
+  * **Implement comprehensive security:** You should integrate Spring Security with JWT for robust authentication and authorization.
+  * **Add input validation:** You should use Bean Validation (`jakarta.validation`) to ensure the integrity and correctness of incoming data.
+  * **Implement advanced querying capabilities:** Consider adding endpoints for filtering logs by date range, specific modified fields, or action types.
+  * **Integrate with a notification system:** You should explore sending notifications (e.g., to an auditing dashboard or a separate service) when critical grade changes occur.
+  * **Introduce caching:** For frequently accessed log data, you could implement a caching layer to improve performance.
+
+-----
+
+## Contributing
+
+We welcome contributions to improve this microservice\!
+
+  * **Fork the repository.**
+  * **Create a new branch** for your feature or bug fix.
+  * **Write clear, concise code** that adheres to the existing coding style.
+  * **Ensure your changes are thoroughly tested.** You should add unit and integration tests for new features and bug fixes.
+  * **Update the documentation** (this README) if your changes affect functionality or setup.
+  * **Submit a pull request.** Provide a detailed description of your changes and why they are necessary.
+
+-----
+
+## Deployment Requirements
+
+To deploy this microservice, you must have the following:
+
+  * A **running MongoDB instance** that is accessible from the deployment environment. You need to ensure the connection string in `application.yml` is correctly configured for your production environment.
+  * A **Java 17 Runtime Environment (JRE)** installed on the deployment server.
+  * Enough **CPU and memory resources** to handle the expected load.
+  * Access to **Maven** to build the project.
+
+You need to ensure that **network configurations allow traffic** to and from the microservice's exposed port (default 8080).
+
+-----
+
+## Best Practices & Tips
+
+  * **Error Handling:** While basic error handling is present, you should implement a global `ControllerAdvice` for consistent and robust error responses across the API. This will centralize error logic and improve maintainability.
+  * **Logging:** You should configure a robust logging framework (e.g., Logback or Log4j2) to capture detailed application logs. This is crucial for debugging and monitoring in a production environment.
+  * **Performance Tuning:** You should profile the application under load to identify and address any performance bottlenecks, especially concerning database interactions.
+  * **Configuration Management:** You should externalize sensitive configurations (like database credentials) using environment variables or a dedicated configuration server (e.g., Spring Cloud Config) for production deployments.
+  * **Security Best Practices:** Beyond authentication/authorization, you should consider protecting against common web vulnerabilities like SQL injection (though less relevant with MongoDB, still good practice), XSS, and CSRF.
+  * **API Versioning:** For future changes, you should consider implementing API versioning (e.g., via URI paths like `/v1/grade-logs`) to manage breaking changes gracefully.
 
 -----
