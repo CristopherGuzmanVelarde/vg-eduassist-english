@@ -1,6 +1,6 @@
 -----
 
-# EduAssist Grade Management Log Microservice (vg-ms-grade-management)
+# EduAssist Grade Microservice (vg-eduassist-english)
 
 This microservice is designed to log and query changes made to student grades. It uses a hexagonal architecture, reactive programming with Spring WebFlux, and MongoDB as its database.
 
